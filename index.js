@@ -1,13 +1,10 @@
 //fileObj = {uri, type, name}
 //uploadArray = [{preSignedUrl: 'http://s3.com/', file: fileObj},{preSignedUrl: 'http://s3.com/1', file: fileObj1}]
-let axios = require("axios");
 
 const uploadImages = async uploadArray => {
   for (let i = 0; i < uploadArray.length; i++) {
-    let dataUri = await axios.get(uploadArray[i].file.uri, {
-      responseType: "blob"
-    });
-    uploadArray[i].file.uri = dataUri.data;
+    let blob = await (await fetch(uploadArray[i].file.uri)).blob()
+    uploadArray[i].file.uri = blob
     uploadUsingPresignedUrl(uploadArray[i].preSignedUrl, uploadArray[i].file);
   }
 };
