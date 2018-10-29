@@ -1,13 +1,19 @@
+import axios from 'axios'
 //fileObj = {uri, type, name}
 //uploadArray = [{preSignedUrl: 'http://s3.com/', file: fileObj},{preSignedUrl: 'http://s3.com/1', file: fileObj1}]
 
-const uploadImages = async uploadArray => {
-  for (let i = 0; i < uploadArray.length; i++) {
-    let blob = await (await fetch(uploadArray[i].file.uri)).blob()
-    uploadArray[i].file.uri = blob
-    uploadUsingPresignedUrl(uploadArray[i].preSignedUrl, uploadArray[i].file);
-  }
-};
+const uploadImages = (uploadArray) => {
+    return new Promise(resolve => {
+        for (let i = 0; i < uploadArray.length; i++) {
+            axios.get(uploadArray[i].file.uri, {responseType: 'blob'})
+                .then(response => {
+                    uploadArray[i].file.uri = response.data
+                    uploadUsingPresignedUrl(uploadArray[i].preSignedUrl, uploadArray[i].file);
+                })
+        }
+    })
+    
+}
 
 const uploadUsingPresignedUrl = (preSignedUrl, file) => {
   const xhr = new XMLHttpRequest();
