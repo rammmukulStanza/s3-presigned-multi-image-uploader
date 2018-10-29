@@ -1,6 +1,6 @@
 {
   "name": "s3-presigned-multi-image-uploader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NPM module which allows to upload multiple images to S3 using presigned flow",
   "main": "lib/index.js",
   "scripts": {
